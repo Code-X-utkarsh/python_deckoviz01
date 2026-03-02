@@ -240,15 +240,15 @@ async def websocket_tv_endpoint(websocket: WebSocket):
         # Store the welcome message in Redis
         redis_manager.store_room_message(room_id, welcome_message)
         
-        # Pass is_accepted=True since we manually accepted the connection above
-        await manager.connect(websocket, room_id, is_accepted=True)
+        # Send welcome message ONLY to this client (not broadcast to all)
+        await manager.send_to_client(websocket, welcome_message)
         
-        # Send welcome message to this client
-        await manager.broadcast(room_id, welcome_message)
+        # Broadcast to OTHER clients that a TV connected
+        await manager.broadcast(room_id, welcome_message, exclude=websocket)
         
-        # Send recent message history
+        # Send recent message history ONLY to this client
         if recent_messages:
-            await manager.broadcast(room_id, {
+            await manager.send_to_client(websocket, {
                 "type": "history",
                 "messages": recent_messages,
                 "count": len(recent_messages)
@@ -296,10 +296,8 @@ async def websocket_tv_endpoint(websocket: WebSocket):
             room_metadata["last_activity"] = time.time()
             redis_manager.store_room_metadata(room_id, room_metadata)
             
-            # Broadcast to all clients in the room
-            for client in manager.active_connections.get(room_id, []):
-                if client != websocket:  # Don't send back to sender
-                    await manager.broadcast(room_id, message)
+            # Broadcast to all clients in the room except sender
+            await manager.broadcast(room_id, message, exclude=websocket)
                     
     except WebSocketDisconnect:
         # Clean up connection
@@ -310,7 +308,7 @@ async def websocket_tv_endpoint(websocket: WebSocket):
         room_id = ws_room_mapping.get(connection_id, room_id)
         
         # Remove from active connections
-        await manager.disconnect(websocket, room_id)
+        manager.disconnect(websocket, room_id)
         
         # Remove from WebSocket to room mapping
         if connection_id in ws_room_mapping:
@@ -431,12 +429,15 @@ async def websocket_mobile_endpoint(websocket: WebSocket):
         # Store the welcome message in Redis
         redis_manager.store_room_message(room_id, welcome_message)
         
-        # Send welcome message to this client
-        await manager.broadcast(room_id, welcome_message)
+        # Send welcome message ONLY to this client
+        await manager.send_to_client(websocket, welcome_message)
         
-        # Send recent message history
+        # Broadcast to OTHER clients that a mobile connected
+        await manager.broadcast(room_id, welcome_message, exclude=websocket)
+        
+        # Send recent message history ONLY to this client
         if recent_messages:
-            await manager.broadcast(room_id, {
+            await manager.send_to_client(websocket, {
                 "type": "history",
                 "messages": recent_messages,
                 "count": len(recent_messages)
@@ -483,10 +484,8 @@ async def websocket_mobile_endpoint(websocket: WebSocket):
             room_metadata["last_activity"] = time.time()
             redis_manager.store_room_metadata(room_id, room_metadata)
             
-            # Broadcast to all clients in the room
-            for client in manager.active_connections.get(room_id, []):
-                if client != websocket:  # Don't send back to sender
-                    await client.send_json(message)
+            # Broadcast to all clients in the room except sender
+            await manager.broadcast(room_id, message, exclude=websocket)
                     
     except WebSocketDisconnect:
         # Clean up connection
@@ -497,7 +496,7 @@ async def websocket_mobile_endpoint(websocket: WebSocket):
         room_id = ws_room_mapping.get(connection_id, room_id)
         
         # Remove from active connections
-        await manager.disconnect(websocket, room_id)
+        manager.disconnect(websocket, room_id)
         
         # Remove from WebSocket to room mapping
         if connection_id in ws_room_mapping:
