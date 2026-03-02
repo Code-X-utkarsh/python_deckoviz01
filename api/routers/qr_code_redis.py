@@ -275,6 +275,11 @@ async def websocket_tv_endpoint(websocket: WebSocket):
                 # Skip processing this message
                 continue
                 
+            # Handle ping/pong keepalive (don't store or broadcast)
+            if isinstance(data, dict) and data.get('type') == 'ping':
+                await websocket.send_json({'type': 'pong', 'timestamp': time.time()})
+                continue
+            
             # Log the successfully parsed message
             logger.debug(f"Received message in room {room_id} from TV: {data}")
             
@@ -464,6 +469,11 @@ async def websocket_mobile_endpoint(websocket: WebSocket):
                 # Skip processing this message
                 continue
                 
+            # Handle ping/pong keepalive (don't store or broadcast)
+            if isinstance(data, dict) and data.get('type') == 'ping':
+                await websocket.send_json({'type': 'pong', 'timestamp': time.time()})
+                continue
+            
             # Log the successfully parsed message
             logger.debug(f"Received message in room {room_id} from mobile: {data}")
             
