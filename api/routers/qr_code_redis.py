@@ -160,7 +160,7 @@ async def get_room_for_device(device_id: str, redis_manager: QRRedisManager = De
     }
 
 # WebSocket endpoints 
-@router.websocket("/ws/tv/")  # Support trailing slash
+@router.websocket("/ws/tv")
 async def websocket_tv_endpoint(websocket: WebSocket):
     """
     WebSocket endpoint for TV app connections.
@@ -348,7 +348,7 @@ async def websocket_tv_endpoint(websocket: WebSocket):
         # Broadcast disconnection to remaining clients
         await manager.broadcast(room_id, disconnect_message)
 
-@router.websocket("/ws/mobile/")  # Support trailing slash
+@router.websocket("/ws/mobile")
 async def websocket_mobile_endpoint(websocket: WebSocket):
     """
     WebSocket endpoint for mobile app connections.

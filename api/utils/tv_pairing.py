@@ -45,7 +45,7 @@ class TVPairingClient:
             Dict: QR code data including base64 image
         """
         # Prepare the API endpoint
-        endpoint = f"{self.api_base_url}/api/generate-qr"
+        endpoint = f"{self.api_base_url}/qr/generate-qr"
         
         # Prepare the request payload
         payload = {
@@ -86,7 +86,7 @@ class TVPairingClient:
         if not self.device_id:
             raise ValueError("No device ID available. Generate a QR code first.")
             
-        endpoint = f"{self.api_base_url}/api/device/{self.device_id}/room"
+        endpoint = f"{self.api_base_url}/qr/device/{self.device_id}/room"
         
         attempt = 0
         while attempt < max_attempts:

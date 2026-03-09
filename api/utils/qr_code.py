@@ -20,7 +20,7 @@ class TVQRCodeGenerator:
         """Generate a unique device ID for the TV"""
         return str(uuid.uuid4())
         
-    def encode_room_pairing_data(self, device_id, api_endpoint="/api/pair"):
+    def encode_room_pairing_data(self, device_id, api_endpoint="/qr/pair"):
         """
         Create a specialized pairing data format for room ID transfer.
         
@@ -224,7 +224,7 @@ class TVQRCodeGenerator:
         # Create the full API endpoint URL
         if not api_base_url.endswith("/"):
             api_base_url += "/"
-        api_endpoint = f"{api_base_url}api/pair"
+        api_endpoint = f"{api_base_url}qr/pair"
         
         # Create specialized pairing data for room ID transfer
         pairing_data = self.encode_room_pairing_data(device_id, api_endpoint)
