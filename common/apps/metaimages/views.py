@@ -151,14 +151,9 @@ class RemoveSharedUserView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @extend_schema(
-<<<<<<< HEAD
     responses={200: MySharedImagesResponseSerializer},
     description="Get all images that the current user has shared with others, including sharing details.",
     tags=["Image Sharing"]
-=======
-    responses={200: OpenApiResponse(description='List of images shared by the current user.')},
-    description="Get all images that the current user has shared with others, including sharing details."
->>>>>>> 6e0cfd7 (Adding and committing code that was altered in production back to the github repo)
 )
 class MySharedImagesView(APIView):
     permission_classes = [IsAuthenticated]
@@ -180,7 +175,6 @@ class MySharedImagesView(APIView):
         return Response({
             'images_shared_by_me': shared_data,
             'total_count': len(shared_data)
-<<<<<<< HEAD
         })
 
 @extend_schema(
@@ -268,6 +262,4 @@ class UsersWhoSharedImagesView(APIView):
         return Response({
             'users_who_shared': users_data,
             'total_users': len(users_data)
-=======
->>>>>>> 6e0cfd7 (Adding and committing code that was altered in production back to the github repo)
-        }) 
+        })

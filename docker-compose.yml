@@ -1,5 +1,5 @@
 services: 
-      
+
   flower:
     build:
       context: .
@@ -80,5 +80,3 @@ networks:
   decoviz_common_default: 
     driver: bridge
 
-
-    

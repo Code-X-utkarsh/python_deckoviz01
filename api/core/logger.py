@@ -2,8 +2,6 @@ import logging
 import logging.handlers
 import os
 
-# Ensure logs directory exists
-os.makedirs('/app/logs', exist_ok=True)
 
 # Configure logging with detailed format
 logging.basicConfig(
@@ -18,7 +16,6 @@ logger.setLevel(logging.INFO)
 
 # Create file handler with rotation
 file_handler = logging.handlers.RotatingFileHandler(
-    '/app/logs/fastapi_app.log',
     maxBytes=10 * 1024 * 1024,  # 10MB
     backupCount=5
 )
@@ -27,7 +24,6 @@ file_handler.setLevel(logging.INFO)
 # Create request-specific logger for API requests
 request_logger = logging.getLogger('fastapi.requests')
 request_file_handler = logging.handlers.RotatingFileHandler(
-    '/app/logs/fastapi_requests.log',
     maxBytes=10 * 1024 * 1024,  # 10MB
     backupCount=5
 )

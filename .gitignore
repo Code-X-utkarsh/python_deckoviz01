@@ -1,48 +1,16 @@
-# Ignore venv folder
 venv/
-
-# Ignore pipenv virtual environment
 Pipfile
 Pipfile.lock
 
-# Ignore macOS system files
-.DS_Store
-
-# Ignore editor/IDE files
-.vscode/
-.idea/
-*.pyc
-
-# Ignore log files
-*.log
-logs/
-*.log.*
-
-# Ignore environment-specific files
 .env
 .env.*
 *.pem
 
-# Celery Logs & Beat
 celerybeat-schedule
 
-# Ignore SQLite database file
 *.sqlite3
 
-# Ignore compiled Python files
-__pycache__/
-*.py[cod]
-
-# Ignore system-specific files
-*.swp
-Thumbs.db
-
-#Ignore uploads
 media/
 configs/
 
-# Ignore streamlit app
 /output/
-/common/rest_framework
-/common/admin
-/common/staticfiles/logs/

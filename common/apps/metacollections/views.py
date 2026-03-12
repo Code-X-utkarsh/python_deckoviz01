@@ -194,14 +194,9 @@ class RemoveFromLikedCollectionView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @extend_schema(
-<<<<<<< HEAD
     responses={200: MySharedCollectionsResponseSerializer},
     description="Get all collections that the current user has shared with others, including sharing details.",
     tags=["Collection Sharing"]
-=======
-    responses={200: OpenApiResponse(description='List of collections shared by the current user.')},
-    description="Get all collections that the current user has shared with others, including sharing details."
->>>>>>> 6e0cfd7 (Adding and committing code that was altered in production back to the github repo)
 )
 class MySharedCollectionsView(APIView):
     permission_classes = [IsAuthenticated]
@@ -223,7 +218,6 @@ class MySharedCollectionsView(APIView):
         return Response({
             'collections_shared_by_me': shared_data,
             'total_count': len(shared_data)
-<<<<<<< HEAD
         })
 
 @extend_schema(
@@ -311,6 +305,4 @@ class UsersWhoSharedCollectionsView(APIView):
         return Response({
             'users_who_shared': users_data,
             'total_users': len(users_data)
-=======
->>>>>>> 6e0cfd7 (Adding and committing code that was altered in production back to the github repo)
-        }) 
+        })

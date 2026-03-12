@@ -12,7 +12,6 @@ logging.basicConfig(level=logging.DEBUG)
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, project_root)
 
-from routers import  websocket, rooms, qr_code_redis, curations, curations
 from databases.configs import get_redis_client
 from middleware.logging import RequestLoggingMiddleware
 

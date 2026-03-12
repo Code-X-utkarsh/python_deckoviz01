@@ -75,8 +75,6 @@ class QRRedisManager:
         try:
             key = f"{self.DEVICE_ROOM_PREFIX}{device_id}"
             data = self.redis.get(key)
-            print(self.redis.get(key))
-            print(key,data)
             
             if data:
                 return json.loads(data)

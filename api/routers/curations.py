@@ -14,7 +14,6 @@ router = APIRouter(
 )
 
 # Django API base URL (for Docker environment)
-DJANGO_API_BASE = "http://common:8000"  # Using Docker service name
 
 
 @router.get("/all")
