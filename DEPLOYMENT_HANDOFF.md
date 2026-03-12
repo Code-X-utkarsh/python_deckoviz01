@@ -1,9 +1,9 @@
 # Deckoviz — Deployment & Handoff Documentation
 
-**Version:** 1.0  
-**Date:** March 12, 2026  
-**Branch:** `feature-user_history`  
-**Status:** ✅ Validated & Production-Ready
+**Version:** 1.1  
+**Date:** March 13, 2026  
+**Branch:** `feature-user_history` (merged from `6_Digit_Device_Linking_System`)  
+**Status:** ✅ Post-Merge Validated — 32/32 Tests Passing — Production-Ready
 
 ---
 
@@ -101,6 +101,24 @@ All device linking state is stored in **Redis** with TTL-based auto-expiration �
 | `api/main.py` | Added `device_link` router import and registration |
 | `api/utils/token.py` | Added `create_refresh_token()`, `verify_refresh_token()`, and `exp` claim to access tokens |
 | `api/core/logger.py` | Made log directory configurable via `LOG_DIR` environment variable |
+
+### Post-Merge Repair (March 13, 2026)
+
+A rebase from `6_Digit_Device_Linking_System` caused severe damage to 9 files due to conflict resolution. All files were fully repaired and validated:
+
+| File | Damage | Repair |
+|------|--------|--------|
+| `api/utils/token.py` | Reduced from 90→19 lines; all JWT functions lost | Restored all 4 JWT functions with `exp` claims and refresh token support |
+| `api/utils/settings.py` | Reduced from 26→17 lines; missing JWT/Redis/DB config | Restored all configuration variables |
+| `api/main.py` | Missing `device_link` router import and registration | Restored import and `app.include_router()` |
+| `api/databases/configs.py` | Empty `DATABASE_URL`; broken `get_db()` / `get_client()` | Restored lazy `_init_db()`, proper connection handling |
+| `docker-compose.yml` | Reduced from 124→83 lines; missing `redis` and `postgres` services | Restored all services, `depends_on`, `volumes` |
+| `api/core/logger.py` | Missing `LOG_DIR` env var; broken `RotatingFileHandler` | Restored configurable log path with `os.makedirs()` |
+| `.gitignore` | Reduced from 83→17 lines | Restored comprehensive ignore patterns |
+| `api/.env.example` | Completely empty (0 lines) | Restored full 42-line configuration template |
+| `api/requirements.txt` | Missing `pytest` and `httpx` | Restored testing dependencies |
+
+> Post-merge validation confirmed: all syntax checks pass, no conflict markers remain, and all 32 automated tests pass. See `POST_MERGE_VALIDATION_REPORT.md` for full details.
 
 ### Bug Fixes Applied
 
@@ -1057,5 +1075,5 @@ docker inspect --format='{{json .State.Health}}' api | python -m json.tool
 
 ---
 
-*Generated: March 12, 2026 — Deckoviz Deployment Team*
+*Generated: March 13, 2026 — Deckoviz Deployment Team (Post-Merge Validated)*
 
