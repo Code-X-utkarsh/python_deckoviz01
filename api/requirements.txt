@@ -15,3 +15,7 @@ qrcode
 google-cloud-storage>=3.1.0
 google-genai>=0.1.0
 pillow==11.2.1
+
+# Testing
+pytest>=7.0.0
+httpx>=0.23.0

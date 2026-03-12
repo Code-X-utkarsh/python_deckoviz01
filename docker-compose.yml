@@ -1,5 +1,33 @@
 services: 
 
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - decoviz_common_default
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - decoviz_common_default
+
   flower:
     build:
       context: .
@@ -17,6 +45,7 @@ services:
       - decoviz_common_default
     depends_on:
       - celery_worker
+      - redis
     command: >
       bash -c "pip install flower &&
       celery -A deckoviz flower --port=5555 --broker=${REDIS_URL}"
@@ -28,6 +57,9 @@ services:
       dockerfile: common/Dockerfile
     env_file:
       - .env
+    depends_on:
+      - redis
+      - postgres
     volumes:
       - ./logs/celery:/app/logs/celery 
     networks:
@@ -48,6 +80,9 @@ services:
       - ./common:/app
       - ./logs:/app/logs  # Mount logs directory
     command: ["bash", "/app/scripts.sh"]
+    depends_on:
+      - redis
+      - postgres
     networks:
       - decoviz_common_default 
 
@@ -64,6 +99,9 @@ services:
     environment:
       - PYTHONPATH=/app
     command: uvicorn main:app --host 0.0.0.0 --port 8080 --reload
+    depends_on:
+      - redis
+      - postgres
     networks:
       - decoviz_common_default
     volumes:
@@ -80,3 +118,6 @@ networks:
   decoviz_common_default: 
     driver: bridge
 
+volumes:
+  redis_data:
+  postgres_data:
